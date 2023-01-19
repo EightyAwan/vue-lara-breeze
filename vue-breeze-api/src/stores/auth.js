@@ -39,15 +39,16 @@ export const useAuthStore = defineStore("auth",{
         },
         async handleRegister(data){
             this.authErrors = [];
+            this.authSuccess = [];
             await this.getToken();   
             try{
-                await axios.post('/register',{
+                const response = await axios.post('/register',{
                     name: data.name,
                     email: data.email,
                     password: data.password,
                     password_confirmation: data.password_confirmation, 
-                }); 
-                this.router.push('/');   
+                });  
+                this.authSuccess = response.data;   
             }catch(errors){
                 if(errors.response.status === 422){
                     this.authErrors = errors.response.data.errors;
@@ -66,10 +67,24 @@ export const useAuthStore = defineStore("auth",{
             this.authSuccess = [];
             await this.getToken(); 
             try{
-                await axios.post("/forgot-password",{
+                const response = await axios.post("/forgot-password",{
                     email: email.email
                 }); 
-                this.authSuccess = "We have sent you reset password link on your email.";
+                this.authSuccess = response.data;  
+            }catch(errors){
+                if(errors.response.status === 422){
+                    this.authErrors = errors.response.data.errors;
+                }
+            } 
+ 
+        },
+        async handleResetPassword(resetData){
+            this.authErrors = [];
+            this.authSuccess = [];
+            await this.getToken();
+            try{
+                const response = await axios.post("/reset-password",resetData);
+                this.authSuccess = response.data;
             }catch(errors){
                 if(errors.response.status === 422){
                     this.authErrors = errors.response.data.errors;

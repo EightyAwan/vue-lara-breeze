@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue"; 
 import { useAuthStore } from "../stores/auth";
-import useRouter from 'vue-router';
+import { useRoute } from 'vue-router';
 
-const route = useRouter();
+const route = useRoute();
 
 const form = ref({
     email: route.query.email,
@@ -12,6 +12,7 @@ const form = ref({
     password_confirmation: '',
 });
 const authStore = useAuthStore();  
+authStore.authSuccess=null;
 </script>
 <template> 
 <div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -22,7 +23,7 @@ const authStore = useAuthStore();
       <p class="mt-2 text-center text-sm text-gray-600"> 
       </p>
     </div>
-    <form class="mt-8 space-y-6" @submit.prevent="authStore.handleForgotPassword(form)">
+    <form class="mt-8 space-y-6" @submit.prevent="authStore.handleResetPassword(form)">
       <input type="hidden" name="remember" value="true">
       <div class="-space-y-px rounded-md shadow-sm"> 
         <div>
@@ -34,6 +35,11 @@ const authStore = useAuthStore();
            required 
            class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="New Password">
            <div v-if="authStore.errors?.password" class="flex">
+             <span class="text-red-400 text-sm m-2 p-2">
+              {{ authStore.errors.password[0] }}
+            </span>
+          </div>
+          <div v-if="authStore.errors?.email" class="flex">
              <span class="text-red-400 text-sm m-2 p-2">
               {{ authStore.errors.email[0] }}
             </span>
@@ -49,10 +55,12 @@ const authStore = useAuthStore();
            autocomplete="email" 
            required 
            class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password Confirmation">
-            
+           
         </div> 
       </div> 
-
+      <div class="m-2 p-2 text-green-900 font-semibold bg-green-300 rounded-md" v-if="authStore.success?.status"> 
+              {{ authStore.success.status }} 
+      </div>
       <div>
         <button type="submit" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">

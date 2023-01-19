@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useAuthStore } from "../stores/auth"; 
 
 const authStore = useAuthStore();
+authStore.authSuccess=null;
 const form = ref({
   email: '',
   password: '',

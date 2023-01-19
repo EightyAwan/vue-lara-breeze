@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Home from '../components/Home.vue';
+import { useAuthStore } from "../stores/auth";
 
 const routes = [
     { 
         path: "/", 
-        name: "Home", 
+        name: "Home",  
         component: Home 
     },
     { 
@@ -34,5 +35,5 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
-
+ 
 export default router;

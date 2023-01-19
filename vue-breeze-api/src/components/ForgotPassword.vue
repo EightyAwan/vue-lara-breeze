@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useAuthStore } from "../stores/auth"; 
 
 const authStore = useAuthStore();
+authStore.authSuccess=null;
 const form = ref({
   email: '', 
 }); 
@@ -30,20 +31,17 @@ const form = ref({
            autocomplete="email" 
            required 
            class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address">
-           <div v-if="authStore.authErrors" class="flex">
+           <div v-if="authStore.errors?.email" class="flex">
              <span class="text-red-400 text-sm m-2 p-2">
               {{ authStore.errors.email[0] }}
             </span>
           </div>
         </div> 
       </div> 
-
-      <div>
-        <div v-if="authStore.success">
-          <span class="text-green-400 text-sm m-2 p-2">
-              {{ authStore.success }}
-            </span>
-        </div>
+      <div class="m-2 p-2 text-green-900 font-semibold bg-green-300 rounded-md" v-if="authStore.success?.status"> 
+              {{ authStore.success.status }} 
+      </div>
+      <div> 
         <button type="submit" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <!-- Heroicon name: mini/lock-closed -->
